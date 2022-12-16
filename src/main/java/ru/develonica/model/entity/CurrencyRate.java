@@ -1,13 +1,12 @@
 package ru.develonica.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,8 +20,8 @@ import java.time.LocalDate;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@ToString(exclude = "currencyType")
+@EqualsAndHashCode(of = {"id", "value", "date"})
 @Entity
 @Table(name = "currency_rate")
 public class CurrencyRate implements BaseEntity<Integer> {
@@ -31,7 +30,10 @@ public class CurrencyRate implements BaseEntity<Integer> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "currency_id", insertable = false, updatable = false)
+    private Integer currencyId;
+
+    @ManyToOne
     @JoinColumn(name = "currency_id")
     private CurrencyType currencyType;
 
@@ -40,10 +42,4 @@ public class CurrencyRate implements BaseEntity<Integer> {
 
     @Column(nullable = false)
     private LocalDate date;
-
-    public CurrencyRate(CurrencyType currencyType, Double value, LocalDate date) {
-        this.currencyType = currencyType;
-        this.value = value;
-        this.date = date;
-    }
 }

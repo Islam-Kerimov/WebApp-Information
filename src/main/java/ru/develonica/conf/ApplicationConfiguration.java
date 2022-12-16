@@ -4,10 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import ru.develonica.model.entity.TaskProperties;
-import ru.develonica.service.CurrencyService;
-import ru.develonica.service.NewsService;
+import ru.develonica.service.CurrencyParserService;
+import ru.develonica.service.NewsParserService;
 import ru.develonica.service.TaskPropertiesService;
-import ru.develonica.service.WeatherService;
+import ru.develonica.service.WeatherParserService;
 import ru.develonica.task.ScheduledTask;
 import ru.develonica.task.domain.NewsOptions;
 import ru.develonica.task.domain.WeatherOptions;
@@ -28,22 +28,22 @@ public class ApplicationConfiguration {
 
     private final TaskScheduler taskScheduler;
 
-    private final CurrencyService currencyService;
+    private final CurrencyParserService currencyParserService;
 
-    private final NewsService newsService;
+    private final NewsParserService newsParserService;
 
-    private final WeatherService weatherService;
+    private final WeatherParserService weatherParserService;
 
     public ApplicationConfiguration(TaskPropertiesService taskPropertiesService,
                                     TaskScheduler taskScheduler,
-                                    CurrencyService currencyService,
-                                    NewsService newsService,
-                                    WeatherService weatherService) {
+                                    CurrencyParserService currencyParserService,
+                                    NewsParserService newsParserService,
+                                    WeatherParserService weatherParserService) {
         this.taskPropertiesService = taskPropertiesService;
         this.taskScheduler = taskScheduler;
-        this.currencyService = currencyService;
-        this.newsService = newsService;
-        this.weatherService = weatherService;
+        this.currencyParserService = currencyParserService;
+        this.newsParserService = newsParserService;
+        this.weatherParserService = weatherParserService;
     }
 
     /**
@@ -58,11 +58,11 @@ public class ApplicationConfiguration {
 
             switch (taskProperties.getTypeObject()) {
                 case NEWS -> scheduledTask = new ScheduledTaskNews(
-                        taskProperties, NewsOptions.class, newsService);
+                        taskProperties, NewsOptions.class, newsParserService);
                 case WEATHER -> scheduledTask = new ScheduledTaskWeather(
-                        taskProperties, WeatherOptions.class, weatherService);
+                        taskProperties, WeatherOptions.class, weatherParserService);
                 case CURRENCY -> scheduledTask = new ScheduledTaskCurrency(
-                        taskProperties, null, currencyService);
+                        taskProperties, null, currencyParserService);
             }
 
             taskScheduler.schedule(scheduledTask, new CronTrigger(taskProperties.getCronExpression()));

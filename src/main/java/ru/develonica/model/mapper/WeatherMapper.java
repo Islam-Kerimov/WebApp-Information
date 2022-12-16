@@ -1,18 +1,25 @@
 package ru.develonica.model.mapper;
 
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.develonica.model.dto.CityNameDto;
 import ru.develonica.model.dto.WeatherDto;
-import ru.develonica.model.entity.CityName;
 import ru.develonica.model.entity.Weather;
+
+import java.util.List;
 
 /**
  * Маппер объекта Entity в объект DTO.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CityNameDto.class)
 public interface WeatherMapper {
 
-    WeatherDto weatherEntityToDto(Weather weather);
+    @Named("FullForm")
+    @Mapping(target = "cityNameDto", source = "cityName")
+    WeatherDto entityWeatherToDto(Weather weather);
 
-    CityNameDto cityNameEntityToDto(CityName cityName);
+    @IterableMapping(qualifiedByName = "FullForm")
+    List<WeatherDto> entityWeatherListToDtoList(List<Weather> weather);
 }

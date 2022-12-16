@@ -1,26 +1,28 @@
 package ru.develonica.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Валюта.
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@ToString
+@ToString(exclude = "values")
+@EqualsAndHashCode(of = "numCode")
 @Entity
 @Table(name = "currency_type")
 public class CurrencyType implements BaseEntity<Integer> {
@@ -41,4 +43,7 @@ public class CurrencyType implements BaseEntity<Integer> {
 
     @Column(unique = true, nullable = false)
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "currencyType")
+    private List<CurrencyRate> values = new ArrayList<>(0);
 }

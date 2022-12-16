@@ -2,7 +2,7 @@ package ru.develonica.task.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.develonica.model.entity.TaskProperties;
-import ru.develonica.service.NewsService;
+import ru.develonica.service.NewsParserService;
 import ru.develonica.task.ScheduledTask;
 import ru.develonica.task.domain.NewsOptions;
 
@@ -15,20 +15,20 @@ import java.text.ParseException;
  */
 @Slf4j
 public class ScheduledTaskNews extends ScheduledTask<NewsOptions> {
-    private final NewsService newsService;
+    private final NewsParserService newsParserService;
 
     public ScheduledTaskNews(TaskProperties taskProperties,
                              Class<NewsOptions> clazz,
-                             NewsService newsService) {
+                             NewsParserService newsParserService) {
         super(taskProperties, clazz);
-        this.newsService = newsService;
+        this.newsParserService = newsParserService;
     }
 
     @Override
     protected void process() throws IOException, JAXBException {
         try {
             NewsOptions options = getOptions();
-            newsService.addNews(options.getUrl());
+            newsParserService.addNews(options.getUrl());
         } catch (ParseException pe) {
             log.error(pe.getMessage());
         }

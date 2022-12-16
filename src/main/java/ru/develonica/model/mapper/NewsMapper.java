@@ -1,6 +1,9 @@
 package ru.develonica.model.mapper;
 
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.develonica.model.dto.NewsDto;
 import ru.develonica.model.entity.NewsBody;
 
@@ -12,7 +15,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface NewsMapper {
 
-    NewsDto newsEntityToDto(NewsBody newsBody);
+    @Named("FullForm")
+    @Mapping(target = "source", source = "newsSource.name")
+    NewsDto entityNewsToDto(NewsBody newsBody);
 
-    List<NewsDto> convertNewsListToDtoList(List<NewsBody> bodies);
+    @IterableMapping(qualifiedByName = "FullForm")
+    List<NewsDto> entityNewsListToDtoList(List<NewsBody> newsBodies);
 }

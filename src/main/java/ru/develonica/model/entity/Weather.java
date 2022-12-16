@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,17 +38,21 @@ import static java.time.ZoneOffset.ofTotalSeconds;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@ToString(exclude = "cityName")
+@EqualsAndHashCode(of = {"cityId", "name", "description", "dateCreate"})
 @Entity
 @Table(name = "weather")
-@JsonIgnoreProperties({"coord", "base", "sys", "cod", "name", "id", "snow", "rain"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Weather implements BaseEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "city_id", insertable = false, updatable = false)
+    private Integer cityId;
+
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private CityName cityName;
 

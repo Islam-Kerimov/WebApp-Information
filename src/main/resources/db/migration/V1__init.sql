@@ -10,11 +10,10 @@ CREATE TABLE IF NOT EXISTS currency_type
 CREATE TABLE IF NOT EXISTS currency_rate
 (
     id          SERIAL PRIMARY KEY,
-    currency_id INTEGER NOT NULL,
+    currency_id INTEGER REFERENCES currency_type (currency_id),
     value       NUMERIC(6, 4),
-    date        DATE    NOT NULL,
-    UNIQUE (currency_id, date),
-    FOREIGN KEY (currency_id) REFERENCES currency_type (currency_id)
+    date        DATE NOT NULL,
+    UNIQUE (currency_id, date)
 );
 
 CREATE TABLE IF NOT EXISTS city_name

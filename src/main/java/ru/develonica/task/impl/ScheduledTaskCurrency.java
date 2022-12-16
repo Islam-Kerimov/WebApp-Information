@@ -1,6 +1,7 @@
 package ru.develonica.task.impl;
 
 import ru.develonica.model.entity.TaskProperties;
+import ru.develonica.service.CurrencyParserService;
 import ru.develonica.service.CurrencyService;
 import ru.develonica.task.ScheduledTask;
 import ru.develonica.task.domain.Options;
@@ -13,17 +14,17 @@ import java.net.MalformedURLException;
  */
 public class ScheduledTaskCurrency extends ScheduledTask<Options> {
 
-    private final CurrencyService currencyService;
+    private final CurrencyParserService currencyParserService;
 
     public ScheduledTaskCurrency(TaskProperties taskProperties,
                                  Class<Options> clazz,
-                                 CurrencyService currencyService) {
+                                 CurrencyParserService currencyParserService) {
         super(taskProperties, clazz);
-        this.currencyService = currencyService;
+        this.currencyParserService = currencyParserService;
     }
 
     @Override
     protected void process() throws MalformedURLException, JAXBException {
-        currencyService.addCurrencyRates();
+        currencyParserService.addCurrencyRates();
     }
 }

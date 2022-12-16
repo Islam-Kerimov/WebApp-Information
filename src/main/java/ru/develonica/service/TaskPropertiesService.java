@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.develonica.model.entity.TaskProperties;
 import ru.develonica.repository.TaskPropertiesRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +19,6 @@ public class TaskPropertiesService {
     }
 
     public List<TaskProperties> getTaskProperties() {
-        List<TaskProperties> taskProperties = new ArrayList<>();
-        taskPropertiesRepository.findAll().forEach(taskProperties::add);
-
-        return taskProperties;
+        return taskPropertiesRepository.findAll();
     }
 }

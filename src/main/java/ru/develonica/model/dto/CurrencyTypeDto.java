@@ -1,14 +1,14 @@
 package ru.develonica.model.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * Объекта типа валюты для отображения клиенту.
  */
-@Getter
-@Setter
-public class CurrencyTypeDto {
+@Data
+public class CurrencyTypeDto implements Serializable {
     private String numCode;
     private String charCode;
     private Integer logNominal;

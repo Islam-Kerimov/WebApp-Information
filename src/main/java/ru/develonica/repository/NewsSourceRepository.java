@@ -12,9 +12,4 @@ import java.util.List;
 public interface NewsSourceRepository extends JpaRepository<NewsSource, Integer> {
 
     boolean existsByName(String name);
-
-    NewsSource findByName(String name);
-
-    @Query("select n from NewsSource n where n.url like %:url%")
-    List<NewsSource> findBy(String url);
 }

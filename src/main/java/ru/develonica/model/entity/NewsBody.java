@@ -3,7 +3,9 @@ package ru.develonica.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +24,8 @@ import java.time.OffsetDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "newsSource")
+@EqualsAndHashCode(of = "urlNews")
 @Builder
 @Entity
 @Table(name = "news_body")
@@ -31,7 +35,10 @@ public class NewsBody implements BaseEntity<Integer> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "source_id", insertable = false, updatable = false)
+    private Integer sourceId;
+
+    @ManyToOne
     @JoinColumn(name = "source_id")
     private NewsSource newsSource;
 

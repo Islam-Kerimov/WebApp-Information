@@ -1,13 +1,11 @@
 package ru.develonica.model.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * Объекта отображения погоды города клиенту.
  */
-@Getter
-@Setter
+@Data
 public class CityNameDto {
     private Integer id;
     private String name;

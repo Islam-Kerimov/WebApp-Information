@@ -1,9 +1,10 @@
 package ru.develonica.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import ru.develonica.model.entity.CurrencyRate;
-import ru.develonica.model.entity.CurrencyType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,14 +17,35 @@ public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Inte
 
     boolean existsByDate(LocalDate date);
 
+    @Modifying
+    @Query(value = "" +
+            "INSERT INTO currency_rate(currency_id, value, date) " +
+            "VALUES (:id, :value, :localDate)",
+            nativeQuery = true)
+    @Transactional
+    void saveBy(Integer id, Double value, LocalDate localDate);
+
     List<CurrencyRate> findAllByDate(LocalDate date);
 
     List<CurrencyRate> findAllByDateBetween(LocalDate dateFrom, LocalDate dateTo);
 
-    Optional<CurrencyRate> findByCurrencyTypeAndDate(CurrencyType currencyType, LocalDate date);
+    @Query(value = "" +
+            "SELECT * " +
+            "FROM currency_rate cr JOIN currency_type ct " +
+                "ON ct.currency_id = cr.currency_id " +
+            "WHERE ct.num_code = :numCode " +
+                "AND cr.date BETWEEN :dateF AND :dateT",
+            nativeQuery = true)
+    List<CurrencyRate> findAllByNumCodeAndBetween(String numCode, LocalDate dateF, LocalDate dateT);
 
-    List<CurrencyRate> findAllByCurrencyTypeAndDateBetween(
-            CurrencyType currencyType, LocalDate dateFrom, LocalDate dateTo);
+    @Query(value = "" +
+            "SELECT cr.* " +
+            "FROM currency_rate cr JOIN currency_type ct " +
+                "ON ct.currency_id = cr.currency_id " +
+            "WHERE ct.num_code = :numCode " +
+                "AND cr.date = :date",
+            nativeQuery = true)
+    Optional<CurrencyRate> findByNumCodeAndDate(String numCode, LocalDate date);
 
     @Query(value = "" +
             "SELECT c.date " +

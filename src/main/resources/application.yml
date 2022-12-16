@@ -5,6 +5,9 @@ weather:
   api-key: 9d6ee26be92f4c49c153246a179d62b6
   url: https://api.openweathermap.org/data/2.5/weather?id=%s&APPID=%s&units=metric
 
+server:
+  port: 8090
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres

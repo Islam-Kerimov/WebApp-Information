@@ -5,12 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.Double.valueOf;
@@ -21,11 +27,12 @@ import static java.lang.Double.valueOf;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "values")
+@EqualsAndHashCode(of = "name")
 @Builder
 @Entity
 @Table(name = "city_name")
-@JsonIgnoreProperties({"weather", "base", "main", "visibility", "wind", "clouds",
-        "dt", "sys", "timezone", "cod", "snow", "rain"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CityName implements BaseEntity<Integer> {
 
     @Id
@@ -40,6 +47,10 @@ public class CityName implements BaseEntity<Integer> {
 
     @Column(columnDefinition = "NUMERIC", nullable = false)
     private Double latitude;
+
+    @Builder.Default
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cityName")
+    private List<Weather> values = new ArrayList<>(0);
 
     @JsonProperty("coord")
     private void unpackCoord(Map<String, String> coord) {

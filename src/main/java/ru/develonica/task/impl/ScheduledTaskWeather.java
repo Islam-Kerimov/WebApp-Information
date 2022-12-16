@@ -1,7 +1,7 @@
 package ru.develonica.task.impl;
 
 import ru.develonica.model.entity.TaskProperties;
-import ru.develonica.service.WeatherService;
+import ru.develonica.service.WeatherParserService;
 import ru.develonica.task.ScheduledTask;
 import ru.develonica.task.domain.WeatherOptions;
 
@@ -12,18 +12,18 @@ import java.io.IOException;
  */
 public class ScheduledTaskWeather extends ScheduledTask<WeatherOptions> {
 
-    private final WeatherService weatherService;
+    private final WeatherParserService weatherParserService;
 
     public ScheduledTaskWeather(TaskProperties taskProperties,
                                 Class<WeatherOptions> clazz,
-                                WeatherService weatherService) {
+                                WeatherParserService weatherParserService) {
         super(taskProperties, clazz);
-        this.weatherService = weatherService;
+        this.weatherParserService = weatherParserService;
     }
 
     @Override
     protected void process() throws IOException {
         WeatherOptions options = getOptions();
-        weatherService.addWeather(options.getCityId());
+        weatherParserService.addWeather(options.getCityId());
     }
 }
